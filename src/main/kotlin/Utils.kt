@@ -1,0 +1,1 @@
+val whitespaceRegex = "\\s+".toRegex()
