@@ -87,9 +87,7 @@ class DayFive(private val filename: String) {
     val sortedOrder = sortPageSet(pageSet, inDegree, adjacency)
 
     // sortedOrder should contain all pages if no cycles exist
-    if (sortedOrder.size != pageSet.size) {
-      throw IllegalStateException("Cycle detected in topological sort")
-    }
+    check(sortedOrder.size == pageSet.size, { "Cycle detected in topological sort" })
 
     return sortedOrder
   }
