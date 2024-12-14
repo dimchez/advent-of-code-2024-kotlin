@@ -52,7 +52,7 @@ class DaySix(private val filename: String) {
 
 class GameFieldMap(input: String) {
   private val map: MutableList<CharArray> =
-      input.trimEnd().lines().map { it.toCharArray() }.toMutableList()
+      input.trim().lines().map { it.toCharArray() }.toMutableList()
 
   val startLocation: Location
 
