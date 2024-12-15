@@ -1,10 +1,23 @@
 class DaySeven(val input: List<String>) {
-  fun solveFirstChallenge(): Long {
-    val equations = parseInput(input)
-    return equations.filter { it.canReachTarget() }.sumOf { it.target }
-  }
+  private val addMultiplyOperations = listOf(Operation.Add(), Operation.Multiply())
 
-  private fun parseInput(input: List<String>): List<Equation> =
+  private val addMultiplyConcatenateOperations =
+      listOf(Operation.Add(), Operation.Multiply(), Operation.Concatenate())
+
+  fun solveFirstChallenge(): Long =
+      parseEquations(input).filter { it.canReachTarget(addMultiplyOperations) }.sumOf { it.target }
+
+  fun solveSecondChallenge(): Long =
+      parseEquations(input)
+          .partition { it.canReachTarget(addMultiplyOperations) }
+          .let { (solvedByAdditionAndMultiplication, rest) ->
+            solvedByAdditionAndMultiplication.sumOf { it.target } +
+                rest
+                    .filter { it.canReachTarget(addMultiplyConcatenateOperations) }
+                    .sumOf { it.target }
+          }
+
+  private fun parseEquations(input: List<String>): List<Equation> =
       input.map {
         val (targetStr, numbersStr) = it.split(":").map(String::trim)
 
@@ -18,41 +31,56 @@ class DaySeven(val input: List<String>) {
       }
 }
 
-data class Equation(val target: Long, val numbers: List<Long>)
+data class Equation(val target: Long, val numbers: List<Long>) {
+  fun canReachTarget(operators: List<Operation>): Boolean {
+    if (numbers.size == 1) return target == numbers.first()
 
-fun Equation.canReachTarget(): Boolean {
-  if (numbers.size == 1) return target == numbers[0]
-  if (target == 0L) numbers.contains(0)
+    val initialCheckResult = performInitialChecks(target, numbers, operators)
+    if (initialCheckResult != null) return initialCheckResult
 
-  //  minTarget: filter out 1 (excluded by multiplication), sum the rest
-  val minTarget = numbers.filter { it != 1L }.sum()
-
-  // maxTarget: add 1s, multiply the rest
-  val maxTarget = numbers.reduce { acc, next -> if (next == 1L) acc + next else acc * next }
-
-  if (target < minTarget || target > maxTarget) return false
-  if (numbers.contains(target)) return false
-  if (minTarget == target || maxTarget == target) return true
-
-  // Number of operator slots = numbers.size - 1
-  val opCount = numbers.size - 1
-  val totalCombos = 1 shl opCount // 2^(opCount)
-  // Each bit in totalCombos represents + or *: 0 for +, 1 for *
-
-  for (mask in 0 until totalCombos) {
-    var result = numbers[0]
-    for (i in 0 until opCount) {
-      val nextNum = numbers[i + 1]
-      val useMultiply = ((mask shr i) and 1) == 1
-      result = if (useMultiply) result * nextNum else result + nextNum
-    }
-    if (result == target) return true
+    return numbers
+        .drop(1)
+        .fold(mutableSetOf(numbers.first())) { acc, nextNumber ->
+          acc.flatMap { value -> operators.map { it.apply(value, nextNumber) } }.toMutableSet()
+        }
+        .contains(target)
   }
 
-  return false
+  private fun performInitialChecks(
+      target: Long,
+      numbers: List<Long>,
+      operators: List<Operation>
+  ): Boolean? {
+    // do not perform any checks if the operations contains a concatenation
+    if (operators.any { it is Operation.Concatenate }) return null
+
+    if (target == 0L && numbers.contains(0)) return true
+
+    //  minTarget: filter out 1 (excluded by multiplication), sum the rest
+    val minTarget = numbers.filter { it != 1L }.sum()
+
+    // maxTarget: add 1s, multiply the rest
+    val maxTarget = numbers.reduce { acc, next -> if (next == 1L) acc + next else acc * next }
+
+    if (target < minTarget || target > maxTarget) return false
+    if (numbers.contains(target)) return false
+    if (minTarget == target || maxTarget == target) return true
+
+    return null
+  }
 }
 
-fun main() {
-  val daySeven = DaySeven(readInputAsLines("src/test/resources/daySeven.txt"))
-  println(daySeven.solveFirstChallenge())
+sealed class Operation() {
+  class Add : Operation()
+
+  class Multiply : Operation()
+
+  class Concatenate : Operation()
+
+  fun apply(first: Long, second: Long): Long =
+      when (this) {
+        is Add -> first + second
+        is Multiply -> first * second
+        is Concatenate -> "${first}${second}".toLong()
+      }
 }
