@@ -1,17 +1,21 @@
+package com.dimchez.adventofcode2024.day4
+
+import com.dimchez.adventofcode2024.DailyChallenge
+
 private const val XMAS_SEARCH_WORD = "XMAS"
 
 private const val MAS_SAM_SEARCH_WORD = "MAS"
 
-class DayFour(input: List<String>) {
+class DayFour(input: List<String>) : DailyChallenge {
 
   private val grid: List<List<Char>> = input.map { it.trim().toList() }
 
-  fun solveFirstChallenge(): Int {
-    return countXmasWordOccurrences(grid, XMAS_SEARCH_WORD)
+  override fun solveFirstChallenge(): Long {
+    return countXmasWordOccurrences(grid, XMAS_SEARCH_WORD).toLong()
   }
 
-  fun solveSecondChallenge(): Int {
-    return countMasSamOccurrences(grid, MAS_SAM_SEARCH_WORD)
+  override fun solveSecondChallenge(): Long {
+    return countMasSamOccurrences(grid, MAS_SAM_SEARCH_WORD).toLong()
   }
 
   private fun countXmasWordOccurrences(valueGrid: List<List<Char>>, searchWord: String): Int {

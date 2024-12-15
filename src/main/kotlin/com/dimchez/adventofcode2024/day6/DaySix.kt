@@ -1,21 +1,20 @@
-const val EMPTY_SPACE = '.'
+package com.dimchez.adventofcode2024.day6
 
-const val OBSTRUCTION = '#'
+import com.dimchez.adventofcode2024.DailyChallenge
+import com.dimchez.adventofcode2024.utils.readInputAsString
 
-const val GUARD = '^'
-
-class DaySix(private val filename: String) {
-  fun solveFirstChallenge(): Int {
+class DaySix(private val filename: String) : DailyChallenge {
+  override fun solveFirstChallenge(): Long {
     val input = readInputAsString(filename)
     val map = GameFieldMap(input)
     val guard = Guard(map.startLocation)
 
     moveGuard(guard, map)
 
-    return guard.visited.size
+    return guard.visited.size.toLong()
   }
 
-  fun solveSecondChallenge(): Int {
+  override fun solveSecondChallenge(): Long {
     val input = readInputAsString(filename)
     val map = GameFieldMap(input)
     val guard = Guard(map.startLocation)
@@ -33,6 +32,7 @@ class DaySix(private val filename: String) {
 
           newGuard.isRepeatedMove()
         }
+        .toLong()
   }
 
   private fun moveGuard(guard: Guard, map: GameFieldMap) {
@@ -51,24 +51,30 @@ class DaySix(private val filename: String) {
 }
 
 class GameFieldMap(input: String) {
+  private val emptySpace = '.'
+
+  private val obstruction = '#'
+
+  private val guard = '^'
+
   private val map: MutableList<CharArray> =
       input.trim().lines().map { it.toCharArray() }.toMutableList()
 
   val startLocation: Location
 
   init {
-    val line = map.find { it.contains(GUARD) } ?: error("No starting location found")
+    val line = map.find { it.contains(guard) } ?: error("No starting location found")
     val startX = map.indexOf(line)
-    val startY = line.indexOf(GUARD)
+    val startY = line.indexOf(guard)
 
     this.startLocation = Location(startX, startY)
 
-    map[startLocation.x][startLocation.y] = EMPTY_SPACE
+    map[startLocation.x][startLocation.y] = emptySpace
   }
 
   fun isEmpty(location: Location): Boolean {
     require(isWithinBounds(location)) { "Location is out of bounds" }
-    return map[location.x][location.y] == EMPTY_SPACE
+    return map[location.x][location.y] == emptySpace
   }
 
   fun isWithinBounds(location: Location): Boolean =
@@ -76,18 +82,17 @@ class GameFieldMap(input: String) {
 
   fun placeObstacle(location: Location) {
     require(isWithinBounds(location)) { "Location is out of bounds" }
-    map[location.x][location.y] = OBSTRUCTION
+    map[location.x][location.y] = obstruction
   }
 
   fun removeObstacle(location: Location) {
     require(isWithinBounds(location)) { "Location is out of bounds" }
-    map[location.x][location.y] = EMPTY_SPACE
+    map[location.x][location.y] = emptySpace
   }
 }
 
 class Guard(startingPosition: Location) {
   var location = startingPosition
-    internal set
 
   var direction = Direction.UP
     private set

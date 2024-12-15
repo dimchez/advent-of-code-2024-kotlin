@@ -1,3 +1,7 @@
+package com.dimchez.adventofcode2024
+
+import com.dimchez.adventofcode2024.day3.DayThree
+import com.dimchez.adventofcode2024.utils.readInputAsString
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
 

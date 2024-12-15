@@ -1,17 +1,21 @@
+package com.dimchez.adventofcode2024.day2
+
+import com.dimchez.adventofcode2024.DailyChallenge
+import com.dimchez.adventofcode2024.utils.whitespaceRegex
 import kotlin.math.abs
 
 private const val MAX_DIFF = 3
 
-class DayTwo(private val input: List<String>) {
+class DayTwo(private val input: List<String>) : DailyChallenge {
 
   private val diffRange = 1..MAX_DIFF
 
-  fun solveFirstChallenge(): Int {
-    return checkSafeLevels(input, ::isReportSafe)
+  override fun solveFirstChallenge(): Long {
+    return checkSafeLevels(input, ::isReportSafe).toLong()
   }
 
-  fun solveSecondChallenge(): Int {
-    return checkSafeLevels(input, ::isReportSafeWithProblemDampener)
+  override fun solveSecondChallenge(): Long {
+    return checkSafeLevels(input, ::isReportSafeWithProblemDampener).toLong()
   }
 
   private fun checkSafeLevels(input: List<String>, isSafe: (List<Int>) -> Boolean): Int =

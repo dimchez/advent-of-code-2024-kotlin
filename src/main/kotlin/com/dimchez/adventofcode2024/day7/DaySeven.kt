@@ -1,13 +1,18 @@
-class DaySeven(val input: List<String>) {
+package com.dimchez.adventofcode2024.day7
+
+import com.dimchez.adventofcode2024.DailyChallenge
+import com.dimchez.adventofcode2024.utils.whitespaceRegex
+
+class DaySeven(val input: List<String>) : DailyChallenge {
   private val addMultiplyOperations = listOf(Operation.Add(), Operation.Multiply())
 
   private val addMultiplyConcatenateOperations =
       listOf(Operation.Add(), Operation.Multiply(), Operation.Concatenate())
 
-  fun solveFirstChallenge(): Long =
+  override fun solveFirstChallenge(): Long =
       parseEquations(input).filter { it.canReachTarget(addMultiplyOperations) }.sumOf { it.target }
 
-  fun solveSecondChallenge(): Long =
+  override fun solveSecondChallenge(): Long =
       parseEquations(input)
           .partition { it.canReachTarget(addMultiplyOperations) }
           .let { (solvedByAdditionAndMultiplication, rest) ->

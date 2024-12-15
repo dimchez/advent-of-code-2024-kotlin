@@ -1,42 +1,49 @@
+package com.dimchez.adventofcode2024.day5
+
+import com.dimchez.adventofcode2024.DailyChallenge
 import java.io.FileReader
 import java.util.*
 
-class DayFive(private val filename: String) {
-  fun solveFirstChallenge(): Int {
+class DayFive(private val filename: String) : DailyChallenge {
+  override fun solveFirstChallenge(): Long {
     val (rules, updates) = readRulesAndUpdates()
 
-    return updates.fold(0) { acc, update ->
-      val pages = getPages(update)
-      val pagesIndexed = getPagesIndexed(pages)
+    return updates
+        .fold(0) { acc, update ->
+          val pages = getPages(update)
+          val pagesIndexed = getPagesIndexed(pages)
 
-      val matchingRules = getMatchingRules(rules, pagesIndexed)
-      val isCorrectOrder = checkIsCorrectOrder(matchingRules, pagesIndexed)
+          val matchingRules = getMatchingRules(rules, pagesIndexed)
+          val isCorrectOrder = checkIsCorrectOrder(matchingRules, pagesIndexed)
 
-      if (isCorrectOrder) {
-        acc + pages[pages.size / 2]
-      } else {
-        acc
-      }
-    }
+          if (isCorrectOrder) {
+            acc + pages[pages.size / 2]
+          } else {
+            acc
+          }
+        }
+        .toLong()
   }
 
-  fun solveSecondChallenge(): Int {
+  override fun solveSecondChallenge(): Long {
     val (rules, updates) = readRulesAndUpdates()
 
-    return updates.fold(0) { acc, update ->
-      val pages = getPages(update)
-      val pagesIndexed = getPagesIndexed(pages)
+    return updates
+        .fold(0) { acc, update ->
+          val pages = getPages(update)
+          val pagesIndexed = getPagesIndexed(pages)
 
-      val matchingRules = getMatchingRules(rules, pagesIndexed)
-      val isCorrectOrder = checkIsCorrectOrder(matchingRules, pagesIndexed)
+          val matchingRules = getMatchingRules(rules, pagesIndexed)
+          val isCorrectOrder = checkIsCorrectOrder(matchingRules, pagesIndexed)
 
-      if (isCorrectOrder) {
-        acc
-      } else {
-        val correctedOrder = topologicalSortSubset(pages, matchingRules)
-        acc + correctedOrder[correctedOrder.size / 2]
-      }
-    }
+          if (isCorrectOrder) {
+            acc
+          } else {
+            val correctedOrder = topologicalSortSubset(pages, matchingRules)
+            acc + correctedOrder[correctedOrder.size / 2]
+          }
+        }
+        .toLong()
   }
 
   private fun checkIsCorrectOrder(

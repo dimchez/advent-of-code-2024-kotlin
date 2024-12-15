@@ -1,3 +1,6 @@
+package com.dimchez.adventofcode2024
+
+import com.dimchez.adventofcode2024.day6.DaySix
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
 import kotlin.system.measureTimeMillis

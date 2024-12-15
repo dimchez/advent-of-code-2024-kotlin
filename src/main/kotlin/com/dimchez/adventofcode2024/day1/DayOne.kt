@@ -1,13 +1,17 @@
+package com.dimchez.adventofcode2024.day1
+
+import com.dimchez.adventofcode2024.DailyChallenge
+import com.dimchez.adventofcode2024.utils.whitespaceRegex
 import java.io.File
 import kotlin.math.absoluteValue
 
-class DayOne(private val filename: String) {
-  fun solveFirstChallenge(): Long {
+class DayOne(private val filename: String) : DailyChallenge {
+  override fun solveFirstChallenge(): Long {
     val (leftList, rightList) = readInputLines(filename)
     return calculateTotalDistance(leftList, rightList)
   }
 
-  fun solveSecondChallenge(): Long {
+  override fun solveSecondChallenge(): Long {
     val (leftList, rightList) = readInputLines(filename)
     val frequencyMap = buildFrequencyMap(rightList)
     return calculateSimilarityScore(leftList, frequencyMap)

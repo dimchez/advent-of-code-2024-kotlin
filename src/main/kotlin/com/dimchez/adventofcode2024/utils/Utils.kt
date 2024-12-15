@@ -1,3 +1,5 @@
+package com.dimchez.adventofcode2024.utils
+
 import java.io.File
 
 val whitespaceRegex = "\\s+".toRegex()

@@ -1,15 +1,19 @@
-class DayThree(private val input: String) {
+package com.dimchez.adventofcode2024.day3
+
+import com.dimchez.adventofcode2024.DailyChallenge
+
+class DayThree(private val input: String) : DailyChallenge {
 
   private val regexTotal = """mul\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*\)""".toRegex()
 
   private val regexTotalWithConditions =
       """(mul\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*\)|do\(\s*\)|don't\(\s*\))""".toRegex()
 
-  fun solveFirstChallenge(): Long {
+  override fun solveFirstChallenge(): Long {
     return calculateTotal(input)
   }
 
-  fun solveSecondChallenge(): Long {
+  override fun solveSecondChallenge(): Long {
     return calculateTotalWithConditions(input)
   }
 

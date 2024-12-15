@@ -1,3 +1,6 @@
+package com.dimchez.adventofcode2024
+
+import com.dimchez.adventofcode2024.day5.DayFive
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
 
