@@ -12,4 +12,10 @@ class DayEightTest :
         val result = dayEight.solveFirstChallenge()
         result shouldBe 305
       }
+
+      test("Second challenge") {
+        val dayEight = DayEight(readInputAsLines("src/test/resources/dayEight.txt"))
+        val result = dayEight.solveSecondChallenge()
+        result shouldBe 1150
+      }
     })
